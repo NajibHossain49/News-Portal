@@ -3,6 +3,7 @@ import LatestNews from "../Components/LatestNews";
 import LeftNavbar from "../Components/LayoutComponents/LeftNavbar";
 import RightNav from "../Components/LayoutComponents/RightNav";
 import Navbar from "../Components/Navbar";
+import { Outlet } from "react-router-dom"; // Import Outlet
 
 const HomeLayout = () => {
   return (
@@ -18,13 +19,14 @@ const HomeLayout = () => {
       </nav>
       <main className="w-11/12 mx-auto pt-5 grid md:grid-cols-12 gap-3">
         <aside className="left col-span-3">
-          <LeftNavbar/>
+          <LeftNavbar />
         </aside>
         <section className="col-span-6">
-          <h2>Center Section</h2>
+          {/* This is where child routes will render */}
+          <Outlet />  {/* Dynamic content will appear here */}
         </section>
         <aside className="right col-span-3">
-          <h2><RightNav/></h2>
+          <RightNav />
         </aside>
       </main>
     </div>
