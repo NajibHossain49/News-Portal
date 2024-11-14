@@ -6,7 +6,7 @@ const Header = () => {
   // Get the current date
   const currentDate = new Date();
 
-  // Format the date using Bengali locale
+  // Format the date using enUS locale
   const formattedDate = format(currentDate, "EEEE, dd MMMM yyyy", {
     locale: enUS,
   });

@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
 import Marquee from "react-fast-marquee";
-
 const LatestNews = () => {
   return (
     <div className="flex gap-2 items-center bg-base-200 p-2">
       <p className="bg-[#D72050] text-white px-4 py-2 text-lg font-semibold rounded-lg shadow-md whitespace-nowrap">
         Latest News
       </p>
-
       <Marquee pauseOnHover={true}>
         <span className="inline-block">
           <Link
