@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../Context/AuthContext';
 
 const Register = () => {
+
+const {signUp} = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     name: '',
     photoUrl: '',
@@ -22,6 +26,18 @@ const Register = () => {
     const password = e.target.password.value;
     const confirmPassword = e.target.confirmPassword.value;
     const terms = e.target.terms.checked;
+
+    signUp(email,password)
+    .then((userCredential) => {
+      // Signed up 
+      const user = userCredential.user;
+      console.log(user);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    
+    });
 
     // Validate form
     const newErrors = {};
