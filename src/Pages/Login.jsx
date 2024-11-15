@@ -1,22 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../Context/AuthContext';
+
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState(null); 
+    const { signIn } = useContext(AuthContext); 
+    const navigate = useNavigate(); // To redirect after successful login
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
         const rememberMe = e.target.remember.checked;
-        
-        // Handle login logic here
-        console.log('Form submitted:', {
-            email,
-            password,
-            rememberMe
-        });
+
+        // Call signIn function from context
+        signIn(email, password)
+            .then(() => {
+                // Successful login
+                navigate('/'); // Redirect to dashboard or home after successful login
+            })
+            .catch((err) => {
+                // Handle error
+                setError('Invalid email or password'); // Set error message
+                console.error('Error during login:', err);
+                 // Clear the email and password fields after error
+                 e.target.email.value = '';
+                 e.target.password.value = '';
+            });
     };
 
     return (
@@ -30,6 +43,9 @@ const Login = () => {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Error Message */}
+                    {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+
                     {/* Email Field */}
                     <div className="space-y-2">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
