@@ -1,4 +1,4 @@
-import { FaShareAlt, FaRegEye } from "react-icons/fa"; 
+import { FaShareAlt, FaRegEye } from "react-icons/fa";
 import { AiFillStar } from "react-icons/ai";
 
 const NewsCard = (props = {}) => {
@@ -16,7 +16,9 @@ const NewsCard = (props = {}) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-semibold">{news.author.name}</p>
-              <p className="text-sm text-gray-500">{news.author.published_date}</p>
+              <p className="text-sm text-gray-500">
+                {news.author.published_date}
+              </p>
             </div>
             <button className="text-gray-600 hover:text-gray-800">
               <FaShareAlt />
@@ -32,7 +34,10 @@ const NewsCard = (props = {}) => {
       />
       <div className="p-4">
         <p className="text-gray-700 text-sm">
-          {news.details.slice(0, 150)}... <a href="#" className="text-primary">Read More</a>
+          {news.details.slice(0, 150)}...{" "}
+          <a href="#" className="text-primary">
+            Read More
+          </a>
         </p>
         <div className="flex items-center justify-between text-gray-600 mt-4">
           <div className="flex items-center space-x-1">
