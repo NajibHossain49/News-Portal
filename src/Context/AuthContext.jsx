@@ -32,6 +32,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); // This updates the user state when the user logs in or out
+      console.log("The User is",currentUser);
     });
 
     // Cleanup the observer when the component is unmounted

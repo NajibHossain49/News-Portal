@@ -1,5 +1,6 @@
 import { FaShareAlt, FaRegEye } from "react-icons/fa";
 import { AiFillStar } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const NewsCard = (props = {}) => {
   const { news } = props || {};
@@ -35,9 +36,9 @@ const NewsCard = (props = {}) => {
       <div className="p-4">
         <p className="text-gray-700 text-sm">
           {news.details.slice(0, 150)}...{" "}
-          <a href="#" className="text-primary">
+          <Link to={`/news/${news._id}`} className="text-primary">
             Read More
-          </a>
+          </Link>
         </p>
         <div className="flex items-center justify-between text-gray-600 mt-4">
           <div className="flex items-center space-x-1">
