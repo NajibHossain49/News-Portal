@@ -1,23 +1,17 @@
-// Import the functions you need from the SDKs you need
+// src/firebase/firebase.config.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDczNWdgI2hQxFrUX627hupggQ2gDmZmxs",
-  authDomain: "news-portal-1aede.firebaseapp.com",
-  projectId: "news-portal-1aede",
-  storageBucket: "news-portal-1aede.firebasestorage.app",
-  messagingSenderId: "166162930731",
-  appId: "1:166162930731:web:a98f31f21fe46fdbb15e6e",
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 export default app;
-
-// Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app);

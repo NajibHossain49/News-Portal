@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
 
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null); 
+    const location = useLocation();
     const { signIn } = useContext(AuthContext); 
     const navigate = useNavigate(); // To redirect after successful login
 
@@ -20,7 +21,8 @@ const Login = () => {
         signIn(email, password)
             .then(() => {
                 // Successful login
-                navigate('/'); // Redirect to dashboard or home after successful login
+                navigate(location?.state? location.state : '/');  // Redirect to dashboard or home after successful login
+                
             })
             .catch((err) => {
                 // Handle error

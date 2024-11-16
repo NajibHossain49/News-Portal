@@ -1,8 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
+import { useNavigate } from 'react-router';
 
 const Register = () => {
-  const { signUp } = useContext(AuthContext);
+  const { signUp, updateUserProfile } = useContext(AuthContext);
+
+  const navigate = useNavigate(); // To redirect after successful login
 
   // Form state
   const [formData, setFormData] = useState({
@@ -21,87 +24,98 @@ const Register = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Get all form values using e.target.name.value
-    const name = e.target.name.value;
-    const photoUrl = e.target.photoUrl.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    const confirmPassword = e.target.confirmPassword.value;
-    const terms = e.target.terms.checked;
+  // Extract values
+  const name = e.target.name.value;
+  const photoUrl = e.target.photoUrl.value || 'https://example.com/default-photo.jpg'; // Default photo URL if not provided
+  const email = e.target.email.value;
+  const password = e.target.password.value;
+  const confirmPassword = e.target.confirmPassword.value;
+  const terms = e.target.terms.checked;
 
-    // Validate form before submitting
-    const newErrors = {};
+  // Validate the form
+  const newErrors = {};
 
-    if (!name) {
-      newErrors.name = 'Name is required';
-    }
+  if (!name) {
+    newErrors.name = 'Name is required';
+  }
 
-    if (!email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Email is invalid';
-    }
+  if (!photoUrl) {
+    newErrors.photoUrl = 'Photo-Url is required';
+  }
 
-    if (!password) {
-      newErrors.password = 'Password is required';
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
+  if (!email) {
+    newErrors.email = 'Email is required';
+  } else if (!/^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|yahoo\.com|hotmail\.com|icloud\.com)$/i.test(email)) {
+    newErrors.email = 'Email is invalid. Only gmail, outlook, yahoo, hotmail, and icloud are allowed.';
+  }
 
-    if (!confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
+  if (!password) {
+    newErrors.password = 'Password is required';
+  } else if (password.length < 6) {
+    newErrors.password = 'Password must be at least 6 characters';
+  }
 
-    if (!terms) {
-      newErrors.terms = 'You must accept the terms and conditions';
-    }
+  if (!confirmPassword) {
+    newErrors.confirmPassword = 'Please confirm your password';
+  } else if (password !== confirmPassword) {
+    newErrors.confirmPassword = 'Passwords do not match';
+  }
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+  if (!terms) {
+    newErrors.terms = 'You must accept the terms and conditions';
+  }
 
-    // If validation passes, attempt to sign up the user
-    signUp(email, password)
-      .then((userCredential) => {
-        // Successfully signed up
-        const user = userCredential.user;
-        console.log(user);
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
 
-        // Clear the form data and show success message
-        setFormData({
-          name: '',
-          photoUrl: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          terms: false,
+  // If validation passes, attempt to sign up the user
+  signUp(email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      updateUserProfile({ displayName: name, photoURL: photoUrl })
+        .then(() => {
+          // Successfully updated user profile
+          console.log('User profile updated');
+          navigate(location?.state ? location.state : '/');
+        })
+        .catch((err) => {
+          console.error(err);
         });
 
-        setIsSuccess(true);  // Set success state to true
-
-        // Optionally, reset error state in case the user tries to sign up again
-        setErrors({});
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        // Handle specific Firebase error codes
-        if (errorCode === 'auth/email-already-in-use') {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            email: 'This email is already in use.',
-          }));
-        } else {
-          console.error(errorMessage);
-        }
+      // Clear form data
+      setFormData({
+        name: '',
+        photoUrl: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        terms: false,
       });
-  };
+
+      setIsSuccess(true);
+      setErrors({});
+
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      // Handle specific Firebase error codes
+      if (errorCode === 'auth/email-already-in-use') {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: 'This email is already in use.',
+        }));
+      } else {
+        console.error(errorMessage);
+      }
+    });
+};
+
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow-2xl border">
@@ -135,6 +149,7 @@ const Register = () => {
             value={formData.photoUrl}
             onChange={(e) => setFormData({ ...formData, photoUrl: e.target.value })}
           />
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
 
         <div>

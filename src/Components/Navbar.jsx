@@ -1,8 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import UsersIcon from "../assets/user.png";
+import UsersIcon from "../assets/user.png"; // Default user icon
 import { AuthContext } from "../Context/AuthContext";
-
 
 const Navbar = () => {
   // Get user and signOut from AuthContext
@@ -22,15 +21,22 @@ const Navbar = () => {
         <Link to="/about">About</Link>
       </div>
       <div className="login flex gap-2 items-center">
-        {/* If user is logged in, show email and logout button */}
+        {/* If user is logged in, show displayName, photoURL and logout button */}
         {user ? (
           <>
             <div className="flex items-center">
-              <img src={UsersIcon} alt="User Icon" className="w-8 h-8" />
-              <span className="ml-2">{user.email}</span>
+              {/* Show user's photo or default image if no photo is available */}
+              <img
+                src={user?.photoURL || UsersIcon} // Fallback to default icon if no photoURL or if user is not logged in
+                alt="User Icon"
+                className="w-10 h-10 rounded-full" 
+              />
+
+              {/* Display the user's displayName or email if no displayName is set */}
+              <span className="ml-2">{user.displayName || user.email}</span>
             </div>
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={handleLogout}
               className="btn btn-neutral rounded-none"
             >
               Logout

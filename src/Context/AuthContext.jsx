@@ -5,6 +5,7 @@ import {
   signOut as firebaseSignOut,
   getAuth,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import app from "../FireBase/Firebase.config";
 
@@ -34,12 +35,18 @@ const AuthProvider = ({ children }) => {
     return firebaseSignOut(auth);
   };
 
+  // Update a user's profile
+  const updateUserProfile = async (updateData) => {
+    setLoading(true);
+    return updateProfile(auth.currentUser, updateData);
+  };
+
   // Set an authentication state observer and get user data
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); // This updates the user state when the user logs in or out
       setLoading(false);
-      console.log("The User is", currentUser);
+      console.log("The Current-User is", currentUser);
     });
 
     // Cleanup the observer when the component is unmounted
@@ -53,6 +60,7 @@ const AuthProvider = ({ children }) => {
     signIn,
     signOut,
     loading,
+    updateUserProfile,
   };
 
   return (
