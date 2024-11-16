@@ -46,7 +46,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); // This updates the user state when the user logs in or out
       setLoading(false);
-      console.log("The Current-User is", currentUser);
+      // console.log("The Current-User is", currentUser);
     });
 
     // Cleanup the observer when the component is unmounted

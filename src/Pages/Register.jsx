@@ -79,7 +79,7 @@ const Register = () => {
       updateUserProfile({ displayName: name, photoURL: photoUrl })
         .then(() => {
           // Successfully updated user profile
-          console.log('User profile updated');
+          // console.log('User profile updated');
           navigate(location?.state ? location.state : '/');
         })
         .catch((err) => {
